@@ -12,6 +12,7 @@
 
   </head>
 
+  <!--added border to the canvas-->
   <style>
     canvas { border: 3px solid gray;}
   </style>
@@ -20,7 +21,7 @@
 
     <canvas id="canvasOne" width="600" height="300"></canvas>
 
-    <canvas id="canvasTwo" width="360" height="165"></canvas>
+    <canvas id="canvasTwo" width="360" height="225"></canvas>
     <script type="text/javascript">
       // Gets a handle to the element with id canvasOne.
       const canvas = document.getElementById("canvasOne");
@@ -32,28 +33,45 @@
       ctx.fillStyle = "rgb(255, 0, 0)";
       ctx.fillRect(0,0,600,300);
       
+      //added text to canvas
       ctx.fillStyle = "rgb(0, 0, 0)";
       ctx.font = "48px serif";
+      //fill text adds text
       ctx.fillText("CIAN", 10, 50);
 
+      //last paramter is transparency
       ctx.fillStyle = "rgba(0,255,0,0.5)";
-      ctx.fillRect(100,100, 100, 400);
+      ctx.fillRect(180,100, 100, 400);
 
+      //drawing the semi circle and making it transparent
       ctx.beginPath();
-      ctx.fillStyle = "yellow";
+      ctx.fillStyle = "rgba(200,25,0,0.5)";
+      //(x,y,radius, start angle, end angle, counter clockwise)
+      //if set to true the circle will go counter clockwise
       ctx.arc(250,250,40,0,0.5 * Math.PI, true);
       ctx.fill();
       ctx.lineWidth = 4;
+      //allows the stroke of the drawing to be styled
       ctx.strokeStyle = "blue";
       ctx.stroke();
 
+      //drawing the 3/4 circle and making it transparent
       ctx.beginPath();
       ctx.fillStyle = "rgba(0,255,0,0.5)";
       ctx.arc(190,240,40,0, Math.PI);
       ctx.fill();
       ctx.lineWidth = 4;
       ctx.strokeStyle = "black";
+      //added stroke to the circle
       ctx.stroke();
+
+      //ADVANCED*
+      const canvas2 = document.getElementById("canvasTwo");
+      const ctx2 = canvas2.getContext("2d");
+      ctx2.fillStyle = "green";
+      ctx2.fillRect(0,0,360, 225)
+
+      ctx2.fillRect(0, 30, 30, 100)
 
     </script>
 
