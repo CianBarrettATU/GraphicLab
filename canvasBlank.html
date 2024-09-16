@@ -13,7 +13,7 @@
   </head>
 
   <style>
-    canvas { border: 1px solid gray;}
+    canvas { border: 3px solid gray;}
   </style>
 
   <body>
@@ -21,20 +21,38 @@
     <canvas id="canvasOne" width="600" height="300"></canvas>
 
     <script type="text/javascript">
-		// Gets a handle to the element with id canvasOne.
-		const canvas = document.getElementById("canvasOne");
-		// Set the canvas up for drawing in 2D.
-		const ctx = canvas.getContext("2d");
-		// Set the fill colour to bright red.
-		
-		// Create a filled rectangle 
-    ctx.fillStyle = "rgb(255, 0, 0)";
-		ctx.fillRect(0,0,600,300);
-	  
-    ctx.fillStyle = "rgb(0, 0, 0)";
-		ctx.font = "48px serif";
-    ctx.fillText("CIAN", 10, 50);
+      // Gets a handle to the element with id canvasOne.
+      const canvas = document.getElementById("canvasOne");
+      // Set the canvas up for drawing in 2D.
+      const ctx = canvas.getContext("2d");
+      // Set the fill colour to bright red.
+      
+      // Create a filled rectangle 
+      ctx.fillStyle = "rgb(255, 0, 0)";
+      ctx.fillRect(0,0,600,300);
+      
+      ctx.fillStyle = "rgb(0, 0, 0)";
+      ctx.font = "48px serif";
+      ctx.fillText("CIAN", 10, 50);
 
+      ctx.fillStyle = "rgba(0,255,0,0.5)";
+      ctx.fillRect(100,100, 100, 400);
+
+      ctx.beginPath();
+      ctx.fillStyle = "yellow";
+      ctx.arc(250,250,40,0,0.5 * Math.PI, true);
+      ctx.fill();
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = "blue";
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.fillStyle = "purple";
+      ctx.arc(140,240,40,0, Math.PI);
+      ctx.fill();
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = "black";
+      ctx.stroke();
     </script>
 
   </body>
