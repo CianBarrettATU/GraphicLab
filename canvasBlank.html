@@ -13,12 +13,12 @@
   </head>
 
   <style>
-    canvas { border: 1px solid, gray;}
+    canvas { border: 1px solid gray;}
   </style>
 
   <body>
 
-    <canvas id="canvasOne"></canvas>
+    <canvas id="canvasOne" width="600" height="300"></canvas>
 
     <script type="text/javascript">
 		// Gets a handle to the element with id canvasOne.
@@ -28,9 +28,13 @@
 		// Set the fill colour to bright red.
 		
 		// Create a filled rectangle 
-		ctx.fillRect(20,20,150,100);
+    ctx.fillStyle = "rgb(255, 0, 0)";
+		ctx.fillRect(0,0,600,300);
 	  
-		
+    ctx.fillStyle = "rgb(0, 0, 0)";
+		ctx.font = "48px serif";
+    ctx.fillText("CIAN", 10, 50);
+
     </script>
 
   </body>
