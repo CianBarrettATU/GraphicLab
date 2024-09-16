@@ -20,6 +20,7 @@
 
     <canvas id="canvasOne" width="600" height="300"></canvas>
 
+    <canvas id="canvasTwo" width="360" height="165"></canvas>
     <script type="text/javascript">
       // Gets a handle to the element with id canvasOne.
       const canvas = document.getElementById("canvasOne");
@@ -47,12 +48,13 @@
       ctx.stroke();
 
       ctx.beginPath();
-      ctx.fillStyle = "purple";
-      ctx.arc(140,240,40,0, Math.PI);
+      ctx.fillStyle = "rgba(0,255,0,0.5)";
+      ctx.arc(190,240,40,0, Math.PI);
       ctx.fill();
       ctx.lineWidth = 4;
       ctx.strokeStyle = "black";
       ctx.stroke();
+
     </script>
 
   </body>
