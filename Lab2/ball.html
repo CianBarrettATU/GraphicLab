@@ -11,11 +11,15 @@
       body {
           background-color: white;
       }
+      canvas {
+        border: 2px solid black;
+      }
     </style>
 
   </head>
 
   <body>
+    <h1>CIAN</h1>
 
     <canvas id="canvas-for-ball"></canvas>
 
@@ -29,6 +33,7 @@
       var y = 10;
       // A function to repeat every time the animation loops.
       function repeatme() {
+        ctx.clearRect(0,0,300,150);
         // Draw the ball (stroked, not filled).
         ctx.beginPath();
         ctx.arc(50, y, 3, 0, 2 * Math.PI);
