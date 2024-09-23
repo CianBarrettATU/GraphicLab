@@ -41,6 +41,10 @@
         
         // Update the y location.
         y += 1;
+
+        if(y >= 147){
+          return;
+        }
         
         window.requestAnimationFrame(repeatme);
       }
