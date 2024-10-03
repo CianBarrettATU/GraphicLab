@@ -28,10 +28,42 @@
       // Get a 2D context for the canvas.
       var ctx = canvas.getContext("2d");
 
+      var noClicks = 0;
+
+      ctx.fillStyle = "rgb(255,0,0)";
+      var canvasPosition = {
+        x: canvas.offsetLeft,
+        y: canvas.offsetTop
+      };
+
       // The vertical location of the ball.
       window.addEventListener("keypress", function (event) {
         // Just log the event to the console.
         console.log(event);
+      });
+
+      canvas.addEventListener("click", function (event) {
+        var mouse = {
+            x: event.clientX - canvasPosition.x,
+            y: event.clientY - canvasPosition.y
+        }
+
+        var midX = canvas.width / 2;
+        var midY = canvas.height / 2;
+
+        if(mouse.x > midX && mouse.y < midY) {
+            p1.movePadUp();
+        }
+        else if(mouse.x > midX && mouse.y > midY) {
+            p1.movePadDown();
+        }
+        else if(mouse.x < midX && mouse.y > midY) {
+            p2.movePadDown();
+        }
+        else if(mouse.x < midX && mouse.y < midY) {
+            p2.movePadUp();
+        }
+
       });
 
       //keypresses with jQuery
@@ -70,7 +102,7 @@
           this.xPos = xPos;
           this.yPos = yPos;
 
-          this.yVelocity = 3;
+          this.yVelocity = 6;
         }
 
         drawPad() {
