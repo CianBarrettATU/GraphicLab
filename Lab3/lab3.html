@@ -33,7 +33,7 @@
       ctx.fillStyle = "rgb(255,0,0)";
       var canvasPosition = {
         x: canvas.offsetLeft,
-        y: canvas.offsetTop
+        y: canvas.offsetTop,
       };
 
       // The vertical location of the ball.
@@ -44,26 +44,22 @@
 
       canvas.addEventListener("click", function (event) {
         var mouse = {
-            x: event.clientX - canvasPosition.x,
-            y: event.clientY - canvasPosition.y
-        }
+          x: event.clientX - canvasPosition.x,
+          y: event.clientY - canvasPosition.y,
+        };
 
         var midX = canvas.width / 2;
         var midY = canvas.height / 2;
 
-        if(mouse.x > midX && mouse.y < midY) {
-            p1.movePadUp();
+        if (mouse.x > midX && mouse.y < midY) {
+          p1.movePadUp();
+        } else if (mouse.x > midX && mouse.y > midY) {
+          p1.movePadDown();
+        } else if (mouse.x < midX && mouse.y > midY) {
+          p2.movePadDown();
+        } else if (mouse.x < midX && mouse.y < midY) {
+          p2.movePadUp();
         }
-        else if(mouse.x > midX && mouse.y > midY) {
-            p1.movePadDown();
-        }
-        else if(mouse.x < midX && mouse.y > midY) {
-            p2.movePadDown();
-        }
-        else if(mouse.x < midX && mouse.y < midY) {
-            p2.movePadUp();
-        }
-
       });
 
       //keypresses with jQuery
@@ -90,6 +86,16 @@
           case 40:
             console.log("right arrow key pressed!");
             p1.movePadDown();
+            break;
+          
+          case 188:
+            console.log("slowing ball down by 0.01");
+            b1.rotationSpeed -= 0.01;
+            break;
+
+          case 190: 
+            console.log("speeding the ball up by 0.01");
+            b1.rotationSpeed += 0.01;
             break;
         }
       });
@@ -124,6 +130,8 @@
           this.xPos = xPos;
           this.xVelocity = xVelocity;
           this.yVelocity = yVelocity;
+          this.rotationAngle = 0;
+          this.rotationSpeed = 0.05;
         }
 
         draw() {
@@ -131,6 +139,55 @@
           ctx.beginPath();
           ctx.arc(this.xPos, this.yPos, 20, 0, 2 * Math.PI);
           ctx.stroke();
+
+          this.drawPeaceSign();
+        }
+
+        drawPeaceSign() {
+          const radius = 20;
+
+          // Save the current context before transformations
+          ctx.save();
+
+          // Translate the canvas to the ball's position
+          ctx.translate(this.xPos, this.yPos);
+
+          // Increment the rotation angle for continuous rotation
+          this.rotationAngle += this.rotationSpeed; // You can adjust the speed of rotation here
+
+          // Rotate the entire canvas by the updated angle
+          ctx.rotate(this.rotationAngle);
+
+          // Draw the outer circle of the peace sign
+          ctx.beginPath();
+          ctx.arc(0, 0, radius, 0, Math.PI * 2);
+          ctx.stroke();
+
+          // Draw the vertical line
+          ctx.beginPath();
+          ctx.moveTo(0, -radius);
+          ctx.lineTo(0, radius);
+          ctx.stroke();
+
+          // Draw the two diagonal lines
+          ctx.beginPath();
+          ctx.moveTo(0, 0); // Start at center of ball
+          ctx.lineTo(
+            -radius * Math.cos(Math.PI / 4),
+            radius * Math.sin(Math.PI / 4)
+          ); // Bottom left diagonal
+          ctx.stroke();
+
+          ctx.beginPath();
+          ctx.moveTo(0, 0); // Start at center of ball
+          ctx.lineTo(
+            radius * Math.cos(Math.PI / 4),
+            radius * Math.sin(Math.PI / 4)
+          ); // Bottom right diagonal
+          ctx.stroke();
+
+          // Restore the canvas context to its original state (before rotation)
+          ctx.restore();
         }
 
         move() {
