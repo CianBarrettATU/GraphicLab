@@ -87,13 +87,13 @@
             console.log("right arrow key pressed!");
             p1.movePadDown();
             break;
-          
+
           case 188:
             console.log("slowing ball down by 0.01");
             b1.rotationSpeed -= 0.01;
             break;
 
-          case 190: 
+          case 190:
             console.log("speeding the ball up by 0.01");
             b1.rotationSpeed += 0.01;
             break;
@@ -132,6 +132,8 @@
           this.yVelocity = yVelocity;
           this.rotationAngle = 0;
           this.rotationSpeed = 0.05;
+          this.gravity = 0.1;
+          this.bounce = 0.9;
         }
 
         draw() {
@@ -191,6 +193,7 @@
         }
 
         move() {
+          this.yVelocity += this.gravity;
           // Update the y location.
           this.yPos += this.yVelocity;
           this.xPos += this.xVelocity;
@@ -201,6 +204,7 @@
             this.yVelocity = this.yVelocity * -1;
           } else if (this.xPos >= 280) {
             this.xVelocity = this.xVelocity * -1;
+            this.yVelocity * this.bounce;
           } else if (this.xPos <= 20) {
             this.xVelocity = this.xVelocity * -1;
           }
