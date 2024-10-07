@@ -42,15 +42,18 @@
         console.log(event);
       });
 
+      //added event listener for mouse clicks.
       canvas.addEventListener("click", function (event) {
         var mouse = {
           x: event.clientX - canvasPosition.x,
           y: event.clientY - canvasPosition.y,
         };
 
+        //cuts canvas into four quarters.
         var midX = canvas.width / 2;
         var midY = canvas.height / 2;
 
+        //checks which quarter the mouse click is in.
         if (mouse.x > midX && mouse.y < midY) {
           p1.movePadUp();
         } else if (mouse.x > midX && mouse.y > midY) {
@@ -110,11 +113,11 @@
 
           this.yVelocity = 6;
         }
-
+        //draws paddle.
         drawPad() {
           ctx.fillRect(this.xPos, this.yPos, this.width, this.height);
         }
-
+        //handles movement.
         movePadUp() {
           this.yPos -= this.yVelocity;
         }
@@ -124,6 +127,7 @@
         }
       }
 
+      //added bounce and gravity to decrease y velocity
       class Ball {
         constructor(xPos, yPos, xVelocity, yVelocity) {
           this.yPos = yPos;
