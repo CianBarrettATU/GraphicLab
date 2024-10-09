@@ -143,12 +143,14 @@
           this.rotationSpeed = 0.05;
           this.gravity = 0.1;
           this.bounce = 0.9;
+          this.colour = "rgb(255,0,0)";
         }
 
         draw() {
           // Draw the ball (stroked, not filled).
           ctx.beginPath();
           ctx.arc(this.xPos, this.yPos, 20, 0, 2 * Math.PI);
+          ctx.fill();
           ctx.stroke();
 
           this.drawPeaceSign();
@@ -233,6 +235,12 @@
         }
       }
 
+      function updateScore() {
+        ctx.font = "20px Arial";
+        ctx.fillText("Left Paddle Score:" + p2.score, 50, 30);
+        ctx.fillText("Right Paddle Score:" + p1.score, 350, 30);
+      }
+
       b1 = new Ball(70, 30, 1, 1);
 
       p1 = new Paddle(550, 200, 0, 0);
@@ -269,6 +277,7 @@
         p2.drawPad();
 
         checkCollisions();
+        updateScore();
 
         window.requestAnimationFrame(repeatme);
       }
