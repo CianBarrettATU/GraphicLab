@@ -220,11 +220,15 @@
           if (this.xPos >= canvas.width - 20) {
             this.xPos = canvas.width - 20;
             this.xVelocity = this.xVelocity * -1;
+            p1.score = p1.score - 1;
+            console.log("p1 SCORE: ", p1.score);
           }
           // Left boundary
           if (this.xPos <= 20) {
             this.xPos = 20;
             this.xVelocity = this.xVelocity * -1;
+            p2.score = p2.score - 1;
+            console.log("p2 SCORE: ", p2.score);
           }
         }
       }
@@ -248,12 +252,11 @@
           b1.xVelocity = b1.xVelocity * -1;
           p2.score = p2.score + 1;
           console.log("SCORE FOR THE LEFT PADDLE:", p2.score);
-        } else if(p1distance <= 40) {
+        } else if (p1distance <= 40) {
           b1.xVelocity = b1.xVelocity * -1;
           p1.score = p1.score + 1;
           console.log("SCORE FOR THE RIGHT PADDLE:", p1.score);
         }
-
       }
 
       function repeatme() {
