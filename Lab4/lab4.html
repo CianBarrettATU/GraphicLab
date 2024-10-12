@@ -17,19 +17,21 @@
       }
     </style>
   </head>
-
+  
   <body>
     <h1>CIAN</h1>
-
+    
     <h1 id="text">COLLISION</h1>
-
+    
     <canvas width="600" height="400" id="canvas-for-ball"></canvas>
-
+    
     <script type="text/javascript">
       // Gets a handle to the element with id canvasOne.
       var canvas = document.getElementById("canvas-for-ball");
       // Get a 2D context for the canvas.
       var ctx = canvas.getContext("2d");
+      
+      var balls = [];
 
       var noClicks = 0;
 
@@ -51,6 +53,8 @@
           x: event.clientX - canvasPosition.x,
           y: event.clientY - canvasPosition.y,
         };
+
+        spawnBall(mouse.x,mouse.y);
 
         //cuts canvas into four quarters.
         var midX = canvas.width / 2;
@@ -114,7 +118,7 @@
           this.xVelocity = xVelocity;
           this.yVelocity = yVelocity;
           this.score = 0;
-          this.yVelocity = 1;
+          this.yVelocity = 6;
         }
         //draws paddle.
         drawPad() {
@@ -241,10 +245,17 @@
         ctx.fillText("Right Paddle Score:" + p1.score, 350, 30);
       }
 
+      function spawnBall(xCord,yCord) {
+        balls.push(new Ball(xCord,yCord,1,1));
+
+        console.log("added ball to balls array");
+        
+      }
+
       b1 = new Ball(70, 30, 1, 1);
 
-      p1 = new Paddle(550, 200, 0, 0);
-      p2 = new Paddle(50, 200, 0, 0);
+      p1 = new Paddle(570, 200, 0, 0);
+      p2 = new Paddle(30, 200, 0, 0);
 
       function checkCollisions() {
         var p2distance = Math.sqrt(
@@ -253,15 +264,17 @@
         var p1distance = Math.sqrt(
           Math.pow(b1.xPos - p1.xPos, 2) + Math.pow(b1.yPos - p1.yPos, 2)
         );
-        console.log(p2distance);
+        //console.log(p2distance);
 
         if (p2distance <= 40) {
           console.log("COLLISION");
           b1.xVelocity = b1.xVelocity * -1;
+          b1.yVelocity = b1.yVelocity * -1;
           p2.score = p2.score + 1;
           console.log("SCORE FOR THE LEFT PADDLE:", p2.score);
         } else if (p1distance <= 40) {
           b1.xVelocity = b1.xVelocity * -1;
+          b1.yVelocity = b1.yVelocity * -1;
           p1.score = p1.score + 1;
           console.log("SCORE FOR THE RIGHT PADDLE:", p1.score);
         }
@@ -272,6 +285,11 @@
 
         b1.draw();
         b1.move();
+        
+        for(var i = 0; i < balls.length; i++) {
+          balls[i].draw();
+          balls[i].move();
+        }
 
         p1.drawPad();
         p2.drawPad();
