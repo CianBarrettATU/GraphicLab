@@ -17,20 +17,21 @@
       }
     </style>
   </head>
-  
+
   <body>
     <h1>CIAN</h1>
-    
+
     <h1 id="text">COLLISION</h1>
-    
+
     <canvas width="600" height="400" id="canvas-for-ball"></canvas>
-    
+
     <script type="text/javascript">
       // Gets a handle to the element with id canvasOne.
       var canvas = document.getElementById("canvas-for-ball");
       // Get a 2D context for the canvas.
       var ctx = canvas.getContext("2d");
-      
+
+      //empty balls array stores ball objects.
       var balls = [];
 
       var noClicks = 0;
@@ -54,7 +55,9 @@
           y: event.clientY - canvasPosition.y,
         };
 
-        spawnBall(mouse.x,mouse.y);
+
+        //spawns ball at current x,y pos.
+        spawnBall(mouse.x, mouse.y);
 
         //cuts canvas into four quarters.
         var midX = canvas.width / 2;
@@ -100,12 +103,17 @@
 
           case 188:
             console.log("slowing ball down by 0.01");
-            b1.rotationSpeed -= 0.01;
+            //allows acceleration on every ball
+            for(var i = 0; i < balls.length; i++){
+              balls[i].rotationSpeed -= 0.01;
+            } 
             break;
 
           case 190:
             console.log("speeding the ball up by 0.01");
-            b1.rotationSpeed += 0.01;
+            for(var i = 0; i < balls.length; i++){
+              balls[i].rotationSpeed += 0.01;
+            }
             break;
         }
       });
@@ -245,11 +253,13 @@
         ctx.fillText("Right Paddle Score:" + p1.score, 350, 30);
       }
 
-      function spawnBall(xCord,yCord) {
-        balls.push(new Ball(xCord,yCord,1,1));
+      //x,y parameters passed from event listener.
+      function spawnBall(xCord, yCord) {
+
+        //pushes new ball to balls array on mouse click.
+        balls.push(new Ball(xCord, yCord, 1, 1));
 
         console.log("added ball to balls array");
-        
       }
 
       b1 = new Ball(70, 30, 1, 1);
@@ -258,35 +268,38 @@
       p2 = new Paddle(30, 200, 0, 0);
 
       function checkCollisions() {
-        var p2distance = Math.sqrt(
-          Math.pow(b1.xPos - p2.xPos, 2) + Math.pow(b1.yPos - p2.yPos, 2)
-        );
-        var p1distance = Math.sqrt(
-          Math.pow(b1.xPos - p1.xPos, 2) + Math.pow(b1.yPos - p1.yPos, 2)
-        );
-        //console.log(p2distance);
+        for (var i = 0; i < balls.length; i++) {
+          //stores the current ball in the array and calculates distance between centers.
+          var currentBall = balls[i];
+          var p2distance = Math.sqrt(
+            Math.pow(currentBall.xPos - p2.xPos, 2) + Math.pow(currentBall.yPos - p2.yPos, 2)
+          );
+          var p1distance = Math.sqrt(
+            Math.pow(currentBall.xPos - p1.xPos, 2) + Math.pow(currentBall.yPos - p1.yPos, 2)
+          );
+          //console.log(p2distance);
 
-        if (p2distance <= 40) {
-          console.log("COLLISION");
-          b1.xVelocity = b1.xVelocity * -1;
-          b1.yVelocity = b1.yVelocity * -1;
-          p2.score = p2.score + 1;
-          console.log("SCORE FOR THE LEFT PADDLE:", p2.score);
-        } else if (p1distance <= 40) {
-          b1.xVelocity = b1.xVelocity * -1;
-          b1.yVelocity = b1.yVelocity * -1;
-          p1.score = p1.score + 1;
-          console.log("SCORE FOR THE RIGHT PADDLE:", p1.score);
+          //currentBall checks distance and rebounds when they collide.
+          if (p2distance <= 40) {
+            console.log("COLLISION");
+            currentBall.xVelocity = currentBall.xVelocity * -1;
+            currentBall.yVelocity = currentBall.yVelocity * -1;
+            p2.score = p2.score + 1;
+            console.log("SCORE FOR THE LEFT PADDLE:", p2.score);
+          } else if (p1distance <= 40) {
+            currentBall.xVelocity = currentBall.xVelocity * -1;
+            currentBall.yVelocity = currentBall.yVelocity * -1;
+            p1.score = p1.score + 1;
+            console.log("SCORE FOR THE RIGHT PADDLE:", p1.score);
+          }
         }
       }
 
       function repeatme() {
         ctx.clearRect(0, 0, 600, 400);
 
-        b1.draw();
-        b1.move();
-        
-        for(var i = 0; i < balls.length; i++) {
+        //calls draw and move on every new ball
+        for (var i = 0; i < balls.length; i++) {
           balls[i].draw();
           balls[i].move();
         }
