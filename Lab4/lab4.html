@@ -48,6 +48,15 @@
         console.log(event);
       });
 
+      canvas.addEventListener("dblclick", function (event) {
+        //spawns ball at current mouse pos on double click
+        var mouse = {
+          x: event.clientX - canvasPosition.x,
+          y: event.clientY - canvasPosition.y,
+        };          
+        spawnBall(mouse.x, mouse.y);
+      });
+
       //added event listener for mouse clicks.
       canvas.addEventListener("click", function (event) {
         var mouse = {
@@ -55,9 +64,13 @@
           y: event.clientY - canvasPosition.y,
         };
 
+        //delete ball at current x,y
+        let ballDeleted = deleteBall(mouse.x, mouse.y);
 
-        //spawns ball at current x,y pos.
-        spawnBall(mouse.x, mouse.y);
+        //checks if ball should be deleted. Otherwise spawn a ball.
+        if (!ballDeleted) {
+          spawnBall(mouse.x, mouse.y);
+        }
 
         //cuts canvas into four quarters.
         var midX = canvas.width / 2;
@@ -104,14 +117,14 @@
           case 188:
             console.log("slowing ball down by 0.01");
             //allows acceleration on every ball
-            for(var i = 0; i < balls.length; i++){
+            for (var i = 0; i < balls.length; i++) {
               balls[i].rotationSpeed -= 0.01;
-            } 
+            }
             break;
 
           case 190:
             console.log("speeding the ball up by 0.01");
-            for(var i = 0; i < balls.length; i++){
+            for (var i = 0; i < balls.length; i++) {
               balls[i].rotationSpeed += 0.01;
             }
             break;
@@ -255,11 +268,32 @@
 
       //x,y parameters passed from event listener.
       function spawnBall(xCord, yCord) {
-
         //pushes new ball to balls array on mouse click.
         balls.push(new Ball(xCord, yCord, 1, 1));
 
         console.log("added ball to balls array");
+      }
+
+      function deleteBall(x, y) {
+        for (var i = 0; i < balls.length; i++) {
+          let currentBall = balls[i];
+          let distance = Math.sqrt(
+            Math.pow(currentBall.xPos - x, 2) +
+              Math.pow(currentBall.yPos - y, 2)
+          );
+
+          //if distance is < 20 then the click is inside the ball
+          if (distance <= 20) {
+            console.log("Deleting ball", i);
+
+            //deletes ball from the array
+            balls.splice(i, 1);
+
+            return true;
+          }
+        }
+        //returns false if mouse click is not inside ball.
+        return false;
       }
 
       b1 = new Ball(70, 30, 1, 1);
@@ -272,10 +306,12 @@
           //stores the current ball in the array and calculates distance between centers.
           var currentBall = balls[i];
           var p2distance = Math.sqrt(
-            Math.pow(currentBall.xPos - p2.xPos, 2) + Math.pow(currentBall.yPos - p2.yPos, 2)
+            Math.pow(currentBall.xPos - p2.xPos, 2) +
+              Math.pow(currentBall.yPos - p2.yPos, 2)
           );
           var p1distance = Math.sqrt(
-            Math.pow(currentBall.xPos - p1.xPos, 2) + Math.pow(currentBall.yPos - p1.yPos, 2)
+            Math.pow(currentBall.xPos - p1.xPos, 2) +
+              Math.pow(currentBall.yPos - p1.yPos, 2)
           );
           //console.log(p2distance);
 
