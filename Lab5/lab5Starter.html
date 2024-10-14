@@ -27,16 +27,16 @@
         document.body.appendChild(renderer.domElement);
         
         // Define the geometry and material for a sphere.
-        var material = new THREE.MeshBasicMaterial({ color: 0xffff00, wireframe: false });
+        var material = new THREE.MeshLambertMaterial({ color: 0xffff00, wireframe: false });
         var geometry = new THREE.SphereGeometry(20);
 
         var sphere = new THREE.Mesh(geometry, material);
 
         var spotlight = new THREE.SpotLight(0xffffff);
-        spotlight.position.set(1,0.5,1);
+        spotlight.position.set(50,50,50);
         scene.add(spotlight);
 
-        camera.position.z = 50;
+        camera.position.z = 70;
 
         scene.add(sphere);
 
