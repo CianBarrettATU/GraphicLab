@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<!--Import Three.js CDN-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+    </style>
+</head>
+
+<body>
+    <h1>CIAN BARRETT</h1>
+    <script type="text/javascript">
+        
+        // Implement scene - Create a Three.js scene to hold objects.
+        var scene = new THREE.Scene();
+
+        // Create a camera with specified properties.
+        var camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+        // Implement renderer - Create a WebGL renderer for rendering the scene.
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+        
+        // Define the geometry and material for a sphere.
+        var material = new THREE.MeshBasicMaterial({ color: 0xffff00, wireframe: true });
+        var geometry = new THREE.SphereGeometry(20);
+
+        camera.position.z = 50;
+
+        scene.add(sphere);
+
+        var repeatme = function() {
+            renderer.render(scene, camera);
+            requestAnimationFrame(repeatme);
+        }
+        repeatme();
+    </script>
+</body>
+
+</html>
