@@ -1,53 +1,77 @@
 <!DOCTYPE html>
 <html>
-<!--Import Three.js CDN-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- Import Three.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title></title>
-    <style type="text/css">
-    </style>
-</head>
+    <style type="text/css"></style>
+  </head>
 
-<body>
+  <body>
     <h1>CIAN BARRETT</h1>
     <script type="text/javascript">
-        
-        // Implement scene - Create a Three.js scene to hold objects.
-        var scene = new THREE.Scene();
+      class Sphere {
+        constructor(scene) {
+          this.scene = scene;
 
-        // Create a camera with specified properties.
-        var camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 0.1, 1000);
-        // Set camera position
-
-        // Implement renderer - Create a WebGL renderer for rendering the scene.
-        var renderer = new THREE.WebGLRenderer();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
-        
-        // Define the geometry and material for a sphere.
-        var material = new THREE.MeshLambertMaterial({ color: 0xffff00, wireframe: false });
-        var geometry = new THREE.SphereGeometry(20);
-
-        var sphere = new THREE.Mesh(geometry, material);
-
-        var spotlight = new THREE.SpotLight(0xffffff);
-        spotlight.position.set(1,0.5,50);
-        scene.add(spotlight);
-
-        camera.position.z = 70;
-
-        scene.add(sphere);
-
-        var repeatme = function() {
-            renderer.render(scene, camera);
-            requestAnimationFrame(repeatme);
-            sphere.rotation.x += 0.01;
-            sphere.rotation.y += 0.01;
+          var material = new THREE.MeshLambertMaterial({
+            color: 0xffff00,
+            wireframe: false,
+          });
+          var geometry = new THREE.SphereGeometry(20);
+          this.sphere = new THREE.Mesh(geometry, material);
+          this.sphere.position.set(0, 0, 0); // Make sure the sphere is centered
+          this.scene.add(this.sphere);
         }
-        repeatme();
-    </script>
-</body>
 
+        update() {
+          this.sphere.rotation.x += 0.01;
+          this.sphere.rotation.y -= 0.01;
+          this.sphere.position.x += 0.2;
+        }
+      }
+
+      // Create the scene and camera
+      var scene = new THREE.Scene();
+      var camera = new THREE.PerspectiveCamera(
+        80,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+
+      const planeGeometry = new THREE.PlaneGeometry(100, 100);
+      const planeMaterial = new THREE.MeshBasicMaterial({
+        color: 0x00ff00, 
+        side: THREE.DoubleSide,
+      });
+      const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+
+      plane.position.y = -30; 
+      plane.rotation.x = Math.PI / 2; 
+      scene.add(plane);
+
+      var renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+
+      var spotlight = new THREE.SpotLight(0xffffff);
+      spotlight.position.set(1, 0.5, 50);
+      scene.add(spotlight);
+
+      camera.position.z = 100;
+      camera.position.y = 20;  // Adjust height to see above the plane
+
+      var sphere = new Sphere(scene);
+
+      var repeatme = function () {
+        renderer.render(scene, camera);
+        requestAnimationFrame(repeatme);
+        sphere.update();
+      };
+      repeatme();
+    </script>
+  </body>
 </html>
