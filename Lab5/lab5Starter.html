@@ -22,7 +22,10 @@
           });
           var geometry = new THREE.SphereGeometry(20);
           this.sphere = new THREE.Mesh(geometry, material);
-          this.sphere.position.set(0, 0, 0); // Make sure the sphere is centered
+          
+          // Enable shadow casting for the sphere
+          this.sphere.castShadow = true; 
+          this.sphere.position.set(0, 0, 0); // Ensure the sphere is centered
           this.scene.add(this.sphere);
         }
 
@@ -43,26 +46,36 @@
       );
 
       const planeGeometry = new THREE.PlaneGeometry(100, 100);
-      const planeMaterial = new THREE.MeshBasicMaterial({
-        color: 0x00ff00, 
+      const planeMaterial = new THREE.MeshLambertMaterial({
+        color: 0x00ff00,
         side: THREE.DoubleSide,
       });
       const plane = new THREE.Mesh(planeGeometry, planeMaterial);
 
+      plane.receiveShadow = true;
       plane.position.y = -30; 
       plane.rotation.x = Math.PI / 2; 
       scene.add(plane);
 
       var renderer = new THREE.WebGLRenderer();
       renderer.setSize(window.innerWidth, window.innerHeight);
+      
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
       document.body.appendChild(renderer.domElement);
 
       var spotlight = new THREE.SpotLight(0xffffff);
-      spotlight.position.set(1, 0.5, 50);
+      spotlight.castShadow = true;
+      
+      spotlight.shadow.camera.near = 10;
+      spotlight.shadow.camera.far = 200;
+      spotlight.shadow.camera.fov = 30;
+
+      spotlight.position.set(50, 50, 50); // Position light above and to the side
       scene.add(spotlight);
 
       camera.position.z = 100;
-      camera.position.y = 20;  // Adjust height to see above the plane
+      camera.position.y = 20;
 
       var sphere = new Sphere(scene);
 
