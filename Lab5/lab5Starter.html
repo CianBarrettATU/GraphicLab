@@ -13,9 +13,10 @@
     <h1>CIAN BARRETT</h1>
     <script type="text/javascript">
       class Sphere {
-        constructor(scene) {
+        constructor(scene, xPos, yPos) {
           this.yVelocity = 1;
-          this.gravity = 0.1;
+          this.xVelocity = 1;
+          this.gravity = 0.05;
 
           this.scene = scene;
 
@@ -28,31 +29,50 @@
 
           // Enable shadow casting for the sphere
           this.sphere.castShadow = true;
-          this.sphere.position.set(0, 60, 0); // Ensure the sphere is centered
+          this.sphere.position.set(xPos, yPos, 0); // Ensure the sphere is centered
           this.scene.add(this.sphere);
         }
 
         move() {
-          this.yVelocity -= this.gravity;
+          this.yVelocity += this.gravity;
 
-          this.sphere.position.y += this.yVelocity;
+          this.sphere.position.y -= this.yVelocity;
+          // this.sphere.position.x += this.xVelocity;
 
           this.sphere.rotation.x += 0.01;
           this.sphere.rotation.y -= 0.01;
         }
 
-        checkCollisions(planeY) {
-           /*  var distance = Math.sqrt(
-              Math.pow(sphere.x - plane.x, 2) +
-              Math.pow(sphere.x - plane.x, 2))
-     */          
-    
-              if(this.sphere.position.y - 20 <= planeY) {
-                this.sphere.position.y = planeY + 20;
-                this.yVelocity = this.yVelocity * -1
-                console.log("collision")
-              }
+        checkSphereCollision(secondSphere) {
+          var distance = Math.sqrt(
+            Math.pow(
+              this.sphere.position.x - secondSphere.sphere.position.x,
+              2
+            ) +
+              Math.pow(
+                this.sphere.position.y - secondSphere.sphere.position.y,
+                2
+              )
+          );
+
+          if (distance <= 40) {
+            this.xVelocity = this.xVelocity * -1;
+            this.yVelocity = this.yVelocity * -1;
+
+            console.log("spherecollion");
+
+            // secondSphere.xVelocity*= -1;
+            secondSphere.yVelocity *= -1;
           }
+        }
+
+        checkCollisions(planeY) {
+          if (this.sphere.position.y - 20 <= planeY) {
+            this.sphere.position.y = planeY + 20;
+            this.yVelocity = this.yVelocity * -1;
+            console.log("collision");
+          }
+        }
       }
 
       // Create the scene and camera
@@ -96,13 +116,19 @@
       camera.position.z = 100;
       camera.position.y = 20;
 
-      var sphere = new Sphere(scene);
+      var sphere = new Sphere(scene, 0, 90);
+      var sphere2 = new Sphere(scene, 0, 40);
 
       var repeatme = function () {
         renderer.render(scene, camera);
         requestAnimationFrame(repeatme);
         sphere.move();
+        sphere2.move();
+
+        sphere2.checkCollisions(plane.position.y);
         sphere.checkCollisions(plane.position.y);
+
+        sphere.checkSphereCollision(sphere2);
       };
       repeatme();
     </script>
