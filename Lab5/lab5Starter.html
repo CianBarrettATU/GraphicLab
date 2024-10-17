@@ -14,6 +14,9 @@
     <script type="text/javascript">
       class Sphere {
         constructor(scene) {
+          this.yVelocity = 1;
+          this.gravity = 0.1;
+
           this.scene = scene;
 
           var material = new THREE.MeshLambertMaterial({
@@ -22,18 +25,34 @@
           });
           var geometry = new THREE.SphereGeometry(20);
           this.sphere = new THREE.Mesh(geometry, material);
-          
+
           // Enable shadow casting for the sphere
-          this.sphere.castShadow = true; 
-          this.sphere.position.set(0, 0, 0); // Ensure the sphere is centered
+          this.sphere.castShadow = true;
+          this.sphere.position.set(0, 60, 0); // Ensure the sphere is centered
           this.scene.add(this.sphere);
         }
 
-        update() {
+        move() {
+          this.yVelocity -= this.gravity;
+
+          this.sphere.position.y += this.yVelocity;
+
           this.sphere.rotation.x += 0.01;
           this.sphere.rotation.y -= 0.01;
-          this.sphere.position.x += 0.2;
         }
+
+        checkCollisions(planeY) {
+           /*  var distance = Math.sqrt(
+              Math.pow(sphere.x - plane.x, 2) +
+              Math.pow(sphere.x - plane.x, 2))
+     */          
+    
+              if(this.sphere.position.y - 20 <= planeY) {
+                this.sphere.position.y = planeY + 20;
+                this.yVelocity = this.yVelocity * -1
+                console.log("collision")
+              }
+          }
       }
 
       // Create the scene and camera
@@ -53,20 +72,20 @@
       const plane = new THREE.Mesh(planeGeometry, planeMaterial);
 
       plane.receiveShadow = true;
-      plane.position.y = -30; 
-      plane.rotation.x = Math.PI / 2; 
+      plane.position.y = -30;
+      plane.rotation.x = Math.PI / 2;
       scene.add(plane);
 
       var renderer = new THREE.WebGLRenderer();
       renderer.setSize(window.innerWidth, window.innerHeight);
-      
+
       renderer.shadowMap.enabled = true;
       renderer.shadowMap.type = THREE.PCFSoftShadowMap;
       document.body.appendChild(renderer.domElement);
 
       var spotlight = new THREE.SpotLight(0xffffff);
       spotlight.castShadow = true;
-      
+
       spotlight.shadow.camera.near = 10;
       spotlight.shadow.camera.far = 200;
       spotlight.shadow.camera.fov = 30;
@@ -82,7 +101,8 @@
       var repeatme = function () {
         renderer.render(scene, camera);
         requestAnimationFrame(repeatme);
-        sphere.update();
+        sphere.move();
+        sphere.checkCollisions(plane.position.y);
       };
       repeatme();
     </script>
