@@ -16,15 +16,17 @@
         constructor(scene, xPos, yPos) {
           this.yVelocity = 1;
           this.xVelocity = 1;
+          this.zVelocity = 1;
           this.gravity = 0.05;
+          this.damping = 0.9;
 
           this.scene = scene;
 
           var material = new THREE.MeshLambertMaterial({
             color: 0xffff00,
-            wireframe: false,
+            wireframe: true,
           });
-          var geometry = new THREE.SphereGeometry(20);
+          var geometry = new THREE.SphereGeometry(10);
           this.sphere = new THREE.Mesh(geometry, material);
 
           // Enable shadow casting for the sphere
@@ -37,6 +39,9 @@
           this.yVelocity += this.gravity;
 
           this.sphere.position.y -= this.yVelocity;
+          this.sphere.position.x += this.xVelocity;
+          this.sphere.position.z += this.zVelocity;
+
           // this.sphere.position.x += this.xVelocity;
 
           this.sphere.rotation.x += 0.01;
@@ -52,25 +57,57 @@
               Math.pow(
                 this.sphere.position.y - secondSphere.sphere.position.y,
                 2
+              ) +
+              Math.pow(
+                this.sphere.position.z - secondSphere.sphere.position.z,
+                2
               )
           );
 
-          if (distance <= 40) {
+          if (distance <= 20) {
             this.xVelocity = this.xVelocity * -1;
             this.yVelocity = this.yVelocity * -1;
+            this.zVelocity = this.zVelocity * -1;
 
             console.log("spherecollion");
 
-            // secondSphere.xVelocity*= -1;
-            secondSphere.yVelocity *= -1;
+            secondSphere.xVelocity *= -0.9;
+            secondSphere.zVelocity *= -0.9;
+            secondSphere.yVelocity *= -0.9;
           }
         }
 
         checkCollisions(planeY) {
-          if (this.sphere.position.y - 20 <= planeY) {
-            this.sphere.position.y = planeY + 20;
+          if (this.sphere.position.y - 10 <= planeY) {
+            this.sphere.position.y = planeY + 10;
             this.yVelocity = this.yVelocity * -1;
             console.log("collision");
+          }
+        }
+
+        checkCubeCollisions(cubeSize) {
+          const radius = 10;
+
+          if (
+            this.sphere.position.x + radius >= cubeSize / 2 ||
+            this.sphere.position.x - radius <= -cubeSize / 2
+          ) {
+            this.xVelocity *= -this.damping; // Reverse direction and apply damping
+          }
+          // Handle y-axis wall collision
+          if (
+            this.sphere.position.y + radius >= cubeSize / 2 ||
+            this.sphere.position.y - radius <= -cubeSize / 2
+          ) {
+            this.yVelocity *= -this.damping; // Reverse direction and apply damping
+            console.log("hdshfhsadf");
+          }
+          // Handle z-axis wall collision
+          if (
+            this.sphere.position.z + radius >= cubeSize / 2 ||
+            this.sphere.position.z - radius <= -cubeSize / 2
+          ) {
+            this.zVelocity *= -this.damping; // Reverse direction and apply damping
           }
         }
       }
@@ -84,7 +121,7 @@
         1000
       );
 
-      const planeGeometry = new THREE.PlaneGeometry(100, 100);
+      const planeGeometry = new THREE.PlaneGeometry(400, 400);
       const planeMaterial = new THREE.MeshLambertMaterial({
         color: 0x00ff00,
         side: THREE.DoubleSide,
@@ -105,19 +142,29 @@
 
       var spotlight = new THREE.SpotLight(0xffffff);
       spotlight.castShadow = true;
-
       spotlight.shadow.camera.near = 10;
       spotlight.shadow.camera.far = 200;
       spotlight.shadow.camera.fov = 30;
-
-      spotlight.position.set(50, 50, 50); // Position light above and to the side
+      spotlight.position.set(200, 200, 200); // Position light above and to the side
+      spotlight.lookAt(0, 0, 0);
       scene.add(spotlight);
 
-      camera.position.z = 100;
-      camera.position.y = 20;
+      camera.position.set(150, 120, 150);
+      camera.lookAt(0, 0, 0);
 
-      var sphere = new Sphere(scene, 0, 90);
-      var sphere2 = new Sphere(scene, 0, 40);
+      const cubeGeometry = new THREE.BoxGeometry(100, 100, 100);
+      const cubeSize = 100;
+      const cubeMaterial = new THREE.MeshLambertMaterial({
+        opacity: 0.3,
+        transparent: true,
+      });
+
+      const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+      cube.receiveShadow = true;
+      scene.add(cube);
+
+      var sphere = new Sphere(scene, 10, 0);
+      var sphere2 = new Sphere(scene, -20, 10);
 
       var repeatme = function () {
         renderer.render(scene, camera);
@@ -129,6 +176,8 @@
         sphere.checkCollisions(plane.position.y);
 
         sphere.checkSphereCollision(sphere2);
+        sphere.checkCubeCollisions(cubeSize);
+        sphere2.checkCubeCollisions(cubeSize);
       };
       repeatme();
     </script>
