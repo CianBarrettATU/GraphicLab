@@ -10,10 +10,6 @@
     <script src="https://d3js.org/d3.v5.min.js"></script>
  <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
  <script>
-    $.getJSON("https://tinyurl.com/k4chnujx", function (data){
-        console.log(data);
-    });
-
     $.getJSON("https://raw.githubusercontent.com/humphs078/programming_for_data_analysis_assignment_2/refs/heads/main/datasets/fused_datasets/json/long_term_fused_data.json", function (data){
         console.log(data);
         data = data.slice(0, 2500);
@@ -27,15 +23,34 @@
             width = 900 - margin.left - margin.right,
             height = 670 -margin.top -margin.bottom;
 
-        var svg = d3.select('body')
-            .append("svg")
-                .attr("width", width + margin.left + margin.right)
-                .attr("right", height + margin.top + margin.bottom)
-            .append("g")
-                .attr("transfrom", "translate(" + margin.left + "," + margin.top + ")");
+        
+        
+        var y = d3.scaleLinear()
+                .domain(d3.extent(data, function(d){return d["co2_ppmv"];}))
+                .range([height, 0]);
 
-            
-    }
+        var x = d3.scaleLinear()
+                .domain(d3.extent(data, function(d){return (d["years_before_2023"]); }))
+                .range([0, width]);
+
+        var valueLine = d3.line()
+            .x(function(d){return x(d["years_before_2023"])})
+            .y(function(d){return y(d["co2_ppmv"])});
+
+        var xAxis = d3.axisBottom(x)
+        .ticks(3);
+        
+        var yAxis = d3.axisLeft(y)
+        .ticks(3)
+
+        var svg = d3.select('body')
+                    .append("svg")
+                        .attr("width", width + margin.left + margin.right)
+                        .attr("right", height + margin.top + margin.bottom)
+                    .append("g")
+                        .attr("transfrom", "translate(" + margin.left + "," + margin.top + ")");
+
+        }
 
  </script>
  </body>
