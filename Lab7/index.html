@@ -12,7 +12,6 @@
  <script>
     $.getJSON("https://raw.githubusercontent.com/humphs078/programming_for_data_analysis_assignment_2/refs/heads/main/datasets/fused_datasets/json/long_term_fused_data.json", function (data){
         console.log(data);
-        data = data.slice(0, 2500);
 
         plotC02Data(data)
     });
@@ -23,8 +22,6 @@
             width = 900 - margin.left - margin.right,
             height = 670 -margin.top -margin.bottom;
 
-        
-        
         var y = d3.scaleLinear()
                 .domain(d3.extent(data, function(d){return d["co2_ppmv"];}))
                 .range([height, 0]);
@@ -41,15 +38,26 @@
         .ticks(3);
         
         var yAxis = d3.axisLeft(y)
-        .ticks(3)
+        .ticks(3);
 
         var svg = d3.select('body')
                     .append("svg")
                         .attr("width", width + margin.left + margin.right)
-                        .attr("right", height + margin.top + margin.bottom)
+                        .attr("height", height + margin.top + margin.bottom)
                     .append("g")
-                        .attr("transfrom", "translate(" + margin.left + "," + margin.top + ")");
+                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+                svg.append('g')
+                    .attr('class', 'x axis')
+                    .attr("transform", "translate(0,570)")
+                    .call(xAxis)
+                
+                svg.append('g')
+                    .attr('class', 'y axis')
+                    .call(yAxis)
+
+                svg.append("path")
+                    .attr("d", valueLine(data));
         }
 
  </script>
