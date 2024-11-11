@@ -57,7 +57,8 @@
                     .call(yAxis)
 
                 svg.append("path")
-                    .attr("d", valueLine(data));
+                    .attr("d", valueLine(data))
+                    .attr("r", 10).style("fill", "red");
         }
 
  </script>
