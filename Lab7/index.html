@@ -58,7 +58,17 @@
 
                 svg.append("path")
                     .attr("d", valueLine(data))
-                    .attr("r", 10).style("fill", "red");
+                    .attr("r", 10).style("stroke", "red").style("fill", "none");
+
+                svg.append("text")
+                    .attr("class", "y label")
+                    .attr("transform" , "translate(-50, 270)")
+                    .text("co2 ppm");
+
+                svg.append("text")
+                    .attr("class", "x label")
+                    .attr("transform", "translate(380, 600)")
+                    .text("years")
         }
 
  </script>
