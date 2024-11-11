@@ -6,12 +6,27 @@
  <style type="text/css"></style>
  </head>
  <body>
- <script type="text/javascript">
-$.getJSON("https://tinyurl.com/k4chnujx", function (data){
-    console.log(data)
-});
+    <h1>Cian Barrett</h1>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+ <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+ <script>
+    $.getJSON("https://tinyurl.com/k4chnujx", function (data){
+        console.log(data);
+    });
 
+    $.getJSON("https://raw.githubusercontent.com/humphs078/programming_for_data_analysis_assignment_2/refs/heads/main/datasets/fused_datasets/json/long_term_fused_data.json", function (data){
+        console.log(data);
+        data = data.slice(0, 2500);
 
+        plotC02Data(data)
+    });
+
+    function plotC02Data(data) {
+
+        var margin = {top: 50, right: 50, bottom: 50, left: 50},
+            width = 900 - margin.left - margin.right,
+            height = 670 -margin.top -margin.bottom;
+    }
 
  </script>
  </body>
