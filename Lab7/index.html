@@ -1,108 +1,157 @@
 <!DOCTYPE html>
 <html>
- <head>
- <title>D3.js Demo</title>
- <meta charset="UTF-8">
- <style type="text/css"></style>
- </head>
- <body>
+  <head>
+    <title>D3.js Demo</title>
+    <meta charset="UTF-8" />
+    <style type="text/css"></style>
+  </head>
+  <body>
     <h1>Cian Barrett</h1>
     <script src="https://d3js.org/d3.v5.min.js"></script>
- <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
- <script>
-    $.getJSON("https://raw.githubusercontent.com/humphs078/programming_for_data_analysis_assignment_2/refs/heads/main/datasets/fused_datasets/json/long_term_fused_data.json", function (data){
-        console.log(data);
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <script>
+      $.getJSON(
+        "https://raw.githubusercontent.com/humphs078/programming_for_data_analysis_assignment_2/refs/heads/main/datasets/fused_datasets/json/long_term_fused_data.json",
+        function (data) {
+          console.log(data);
 
-        plotC02Data(data)
-    });
+          plotC02Data(data);
+        }
+      );
 
-    function plotC02Data(data) {
-
-        var margin = {top: 50, right: 50, bottom: 50, left: 100},
-            width = 1500 - margin.left - margin.right,
-            height = 670 -margin.top -margin.bottom;
+      function plotC02Data(data) {
+        var margin = { top: 50, right: 50, bottom: 50, left: 100 },
+          width = 1500 - margin.left - margin.right,
+          height = 670 - margin.top - margin.bottom;
 
         //scales
-        var y = d3.scaleLinear()
-                .domain(d3.extent(data, function(d){return d["co2_ppmv"];}))
-                .range([height, 0]);
-        
-        var yTemp = d3.scaleLinear()
-                .domain(d3.extent(data, function(d){return d["temp_anomaly"];}))
-                .range([height, 0]);
+        var y = d3
+          .scaleLinear()
+          .domain(
+            d3.extent(data, function (d) {
+              return d["co2_ppmv"];
+            })
+          )
+          .range([height, 0]);
 
-        var yCh4 = d3.scaleLinear()
-                .domain(d3.extent(data, function(d){return d["ch4_ppb"];}))
-                .range([0, height]);
+        var yTemp = d3
+          .scaleLinear()
+          .domain(
+            d3.extent(data, function (d) {
+              return d["temp_anomaly"];
+            })
+          )
+          .range([height, 0]);
 
-        var x = d3.scaleLinear()
-                .domain(d3.extent(data, function(d){return (d["years_before_2023"]); }))
-                .range([0, width]);
-        
+        var yCh4 = d3
+          .scaleLinear()
+          .domain(
+            d3.extent(data, function (d) {
+              return d["ch4_ppb"];
+            })
+          )
+          .range([0, height]);
+
+        var x = d3
+          .scaleLinear()
+          .domain(
+            d3.extent(data, function (d) {
+              return d["years_before_2023"];
+            })
+          )
+          .range([0, width]);
+
         //lines
-        var valueLine = d3.line()
-            .x(function(d){return x(d["years_before_2023"])})
-            .y(function(d){return y(d["co2_ppmv"])});
+        var valueLine = d3
+          .line()
+          .x(function (d) {
+            return x(d["years_before_2023"]);
+          })
+          .y(function (d) {
+            return y(d["co2_ppmv"]);
+          });
 
-        var ch4Line = d3.line()
-            .x(function(d){return x(d["years_before_2023"])})
-            .y(function(d){return yCh4(d["ch4_ppb"])});
-    
-        var tempLine = d3.line()
-            .x(function(d){return x(d["years_before_2023"])})
-            .y(function(d){return yTemp(d["temp_anomaly"])});
+        var ch4Line = d3
+          .line()
+          .x(function (d) {
+            return x(d["years_before_2023"]);
+          })
+          .y(function (d) {
+            return yCh4(d["ch4_ppb"]);
+          });
+
+        var tempLine = d3
+          .line()
+          .x(function (d) {
+            return x(d["years_before_2023"]);
+          })
+          .y(function (d) {
+            return yTemp(d["temp_anomaly"]);
+          });
 
         //axis
-        var xAxis = d3.axisBottom(x)
-        .ticks(3);
-        
-        var yAxis = d3.axisLeft(y)
-        .ticks(3);
+        var xAxis = d3.axisBottom(x).ticks(3);
 
-        var svg = d3.select('body')
-                    .append("svg")
-                        .attr("width", width + margin.left + margin.right)
-                        .attr("height", height + margin.top + margin.bottom)
-                    .append("g")
-                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        var yAxis = d3.axisLeft(y).ticks(3);
 
-                //axis
-                svg.append('g')
-                    .attr('class', 'x axis')
-                    .attr("transform", "translate(0,570)")
-                    .call(xAxis)
-                
-                svg.append('g')
-                    .attr('class', 'y axis')
-                    .call(yAxis)
+        var svg = d3
+          .select("body")
+          .append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+          .append("g")
+          .attr(
+            "transform",
+            "translate(" + margin.left + "," + margin.top + ")"
+          );
 
-                //c02ppm line
-                svg.append("path")
-                    .attr("d", valueLine(data))
-                    .attr("r", 10).style("stroke", "red").style("fill", "none");
+        //axis
+        svg
+          .append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0,570)")
+          .call(xAxis);
 
-                //temperature line
-                svg.append("path")
-                    .attr("d", tempLine(data))
-                    .attr("r", 10).style("stroke", "blue").style("fill", "none");
+        svg.append("g").attr("class", "y axis").call(yAxis);
 
-                //methane line
-                svg.append("path")
-                    .attr("d", ch4Line(data))
-                    .attr("r", 10).style("stroke", "green").style("fill", "none");
+        //c02ppm line
+        svg
+          .append("path")
+          .attr("d", valueLine(data))
+          .attr("r", 10)
+          .style("stroke", "red")
+          .style("fill", "none");
 
-                svg.append("text")
-                    .attr("class", "y label")
-                    .attr("transform" , "translate(-100, 270)")
-                    .text("co2 ppm").style("font-size", 24);
+        //temperature line
+        svg
+          .append("path")
+          .attr("d", tempLine(data))
+          .attr("r", 10)
+          .style("stroke", "blue")
+          .style("fill", "none");
+          
+        //methane line
+        svg
+          .append("path")
+          .attr("d", ch4Line(data))
+          .attr("r", 10)
+          .style("stroke", "green")
+          .style("fill", "none");
 
-                svg.append("text")
-                    .attr("class", "x label")
-                    .attr("transform", "translate(380, 600)")
-                    .text("years").style("font-size", 24);
-        }
+        svg
+          .append("text")
+          .attr("class", "y label")
+          .attr("transform", "translate(-100, 270)")
+          .text("co2 ppm")
+          .style("font-size", 24);
 
- </script>
- </body>
+        svg
+          .append("text")
+          .attr("class", "x label")
+          .attr("transform", "translate(380, 600)")
+          .text("years")
+          .style("font-size", 24);
+      }
+    </script>
+  </body>
 </html>
-
