@@ -15,24 +15,31 @@ ncols = 3
 sobelHorizontal = cv2.Sobel(imgOut, cv2.CV_64F,1,0,ksize = 5)
 sobelVertical = cv2.Sobel(imgOut, cv2.CV_64F,0,1,ksize = 5)
 
+sobelSum = sobelHorizontal + sobelVertical
+
 plt.subplot(nrows, ncols,1),plt.imshow(img, cmap = 'gray')
 plt.title('Original'), plt.xticks([]), plt.yticks([])
 plt.subplot(nrows, ncols,2),plt.imshow(imgGray, cmap = 'gray')
 plt.title('GrayScale'), plt.xticks([]), plt.yticks([])
-plt.subplot(nrows, ncols,3),plt.imshow(imgOut, cmap = 'gray')
-plt.title('5x5 blur'), plt.xticks([]), plt.yticks([])
+#plt.subplot(nrows, ncols,3),plt.imshow(imgOut, cmap = 'gray')
+#plt.title('5x5 blur'), plt.xticks([]), plt.yticks([])
 
 #13x13 gaussian blur
-plt.subplot(nrows, ncols,4),plt.imshow(imgOut13, cmap = 'gray')
-plt.title('13x13 blur'), plt.xticks([]), plt.yticks([])
+#plt.subplot(nrows, ncols,4),plt.imshow(imgOut13, cmap = 'gray')
+#plt.title('13x13 blur'), plt.xticks([]), plt.yticks([])
 
 #edge detection image
-plt.subplot(nrows, ncols,5),plt.imshow(sobelHorizontal, cmap = 'gray')
+plt.subplot(nrows, ncols,3),plt.imshow(sobelHorizontal, cmap = 'gray')
 plt.title('sobel H'), plt.xticks([]), plt.yticks([])
 
 #vertical edge detection
-plt.subplot(nrows, ncols,6),plt.imshow(sobelVertical, cmap = 'gray')
+plt.subplot(nrows, ncols,4),plt.imshow(sobelVertical, cmap = 'gray')
 plt.title('sobel V'), plt.xticks([]), plt.yticks([])
+
+#summed sobel image
+plt.subplot(nrows, ncols,5),plt.imshow(sobelSum, cmap = 'gray')
+plt.title('sobel summed'), plt.xticks([]), plt.yticks([])
+
 
 
 plt.show()
