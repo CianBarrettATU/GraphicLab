@@ -14,8 +14,9 @@ ncols = 3
 
 sobelHorizontal = cv2.Sobel(imgOut, cv2.CV_64F,1,0,ksize = 5)
 sobelVertical = cv2.Sobel(imgOut, cv2.CV_64F,0,1,ksize = 5)
-
 sobelSum = sobelHorizontal + sobelVertical
+
+canny = cv2.Canny(imgOut,100,200)
 
 plt.subplot(nrows, ncols,1),plt.imshow(img, cmap = 'gray')
 plt.title('Original'), plt.xticks([]), plt.yticks([])
@@ -40,6 +41,9 @@ plt.title('sobel V'), plt.xticks([]), plt.yticks([])
 plt.subplot(nrows, ncols,5),plt.imshow(sobelSum, cmap = 'gray')
 plt.title('sobel summed'), plt.xticks([]), plt.yticks([])
 
+#canny image
+plt.subplot(nrows, ncols,6),plt.imshow(canny, cmap = 'gray')
+plt.title('canny image'), plt.xticks([]), plt.yticks([])
 
 
 plt.show()
