@@ -45,6 +45,20 @@ plt.title('sobel summed'), plt.xticks([]), plt.yticks([])
 plt.subplot(nrows, ncols,6),plt.imshow(canny, cmap = 'gray')
 plt.title('canny image'), plt.xticks([]), plt.yticks([])
 
+#maxVal = np.min(sobelSum)
+
+#maxVal in sobelSum: 10326.0
+#minVal in sobelSum: -9792.0
+#middle val is 267
+
+for val in sobelSum:
+    if val < 267:
+        val = -9792
+    else if val > 267:
+        val = 10326
+
+        
+
 
 plt.show()
 
