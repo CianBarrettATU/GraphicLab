@@ -19,10 +19,5 @@ plt.show()
 
 threshold = 0.5
 
-for i in range(len(dst)):
-    for j in range(len(dst[j])):
-        if dst[i][j] > (threshold*dst.max()):
-            cv2.circle(imgHarris, (j,i),3,(B,G,R),-1)
-
 plt.imshow(imgHarris, cmap = "gray")
 plt.show()
