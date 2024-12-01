@@ -3,9 +3,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 from ultralytics import YOLO
 
-model = YOLO('yolov8n.pt')
 
-results = model(source="100mSprint.mp4", show=True, conf=0.4, save=True)
 
 orbIm = cv2.imread('shrek.jpg', cv2.IMREAD_GRAYSCALE)
 
@@ -86,3 +84,7 @@ plt.title('orb')
 plt.xticks([]), plt.yticks([])
 
 plt.show()
+
+model = YOLO('yolov8n.pt')
+
+results = model(source="100mSprint.mp4", show=True, conf=0.4, save=True)
