@@ -74,6 +74,7 @@ plt.subplot(nrows, ncols, 4)
 plt.imshow(cv2.cvtColor(imgShiTomasi, cv2.COLOR_BGR2RGB))
 plt.title('Shi-Tomasi Corners')
 plt.xticks([]), plt.yticks([])
+#dsafs
 
 plt.subplot(nrows,ncols, 5)
 plt.imshow(cv2.drawKeypoints(orbIm,kp,None, color=(0,255,0), flags=0))
