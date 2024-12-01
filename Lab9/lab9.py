@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 from matplotlib import pyplot as plt
 
-orbIm = cv2.imread('ATU1.jpg', cv2.IMREAD_GRAYSCALE)
+orbIm = cv2.imread('shrek.jpg', cv2.IMREAD_GRAYSCALE)
 
 orb = cv2.ORB_create()
 
@@ -10,7 +10,7 @@ kp = orb.detect(orbIm,None)
 
 kp,des = orb.compute(orbIm, kp)
 
-img = cv2.imread('ATU1.jpg',)
+img = cv2.imread('shrek.jpg',)
 
 imgGray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 imgHarris = img.copy()
@@ -74,7 +74,6 @@ plt.subplot(nrows, ncols, 4)
 plt.imshow(cv2.cvtColor(imgShiTomasi, cv2.COLOR_BGR2RGB))
 plt.title('Shi-Tomasi Corners')
 plt.xticks([]), plt.yticks([])
-#dsafs
 
 plt.subplot(nrows,ncols, 5)
 plt.imshow(cv2.drawKeypoints(orbIm,kp,None, color=(0,255,0), flags=0))
