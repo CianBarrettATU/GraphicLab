@@ -1,9 +1,7 @@
 import cv2
 import numpy as np
 from matplotlib import pyplot as plt
-from ultralytics import YOLO
-
-
+from ultralytics import YOLO, solutions
 
 orbIm = cv2.imread('shrek.jpg', cv2.IMREAD_GRAYSCALE)
 
@@ -85,6 +83,27 @@ plt.xticks([]), plt.yticks([])
 
 plt.show()
 
-model = YOLO('yolov8n.pt')
+def count_specific_classes(video_path, output_video_path, model_path, classes_to_count):
+    """Count specific classes of objects in a video."""
+    cap = cv2.VideoCapture(video_path)
+    assert cap.isOpened(), "Error reading video file"
+    w, h, fps = (int(cap.get(x)) for x in (cv2.CAP_PROP_FRAME_WIDTH, cv2.CAP_PROP_FRAME_HEIGHT, cv2.CAP_PROP_FPS))
+    video_writer = cv2.VideoWriter(output_video_path, cv2.VideoWriter_fourcc(*"mp4v"), fps, (w, h))
 
-results = model(source="100mSprint.mp4", show=True, conf=0.4, save=True)
+    line_points = [(20, 400), (1080, 400)]
+    counter = solutions.ObjectCounter(show=True, region=line_points, model=model_path, classes=classes_to_count)
+
+    while cap.isOpened():
+        success, im0 = cap.read()
+        if not success:
+            print("Video frame is empty or video processing has been successfully completed.")
+            break
+        im0 = counter.count(im0)
+        video_writer.write(im0)
+
+    cap.release()
+    video_writer.release()
+    cv2.destroyAllWindows()
+
+
+count_specific_classes("100m.mp4", "output_specific_classes.avi", "yolo11n.pt", [0])
