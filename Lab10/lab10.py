@@ -17,6 +17,13 @@ while cap.isOpened():
     if success:
         # Run YOLO11 tracking on the frame, persisting tracks between frames
         results = model.track(frame, persist=True)
+        for result in results:
+            boxes = result.boxes
+            if boxes.is_track:
+                track_ids = boxes.id
+                print(f"Tracking IDs: {track_ids}")
+            else:
+                print("Tracking is not enabled for these boxes.")
 
         # Visualize the results on the frame
         annotated_frame = results[0].plot()
